@@ -1,71 +1,93 @@
-
- <!DOCTYPE html><html lang="pt">
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KwikGest Angola – Educação</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KwikGest Angola - Educação</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: #f5f5f5;
+    }
+    .login-box, .panel, .header {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .login-box input, .panel input, .panel button {
+      width: 100%; padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .login-box button {
+      background: #e11b1b; color: white;
+      border: none;
+    }
+    .hidden { display: none; }
+    .header {
+      text-align: center;
+      background-color: #e11b1b;
+      color: white;
+      margin-top: 0;
+      border-radius: 0 0 12px 12px;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
-  <!-- HEADER -->
-  <header class="bg-red-600 text-white p-4 text-center">
-    <h1 class="text-2xl font-bold">KwikGest Educação</h1>
-    <p class="text-sm">Gestão simples para professores e formadores</p>
-  </header>  <!-- DASHBOARD NAV -->  <nav class="flex justify-around bg-white shadow p-2 sticky top-0 z-10">
-    <button class="tab-btn" onclick="showTab('aulas')">Aulas</button>
-    <button class="tab-btn" onclick="showTab('alunos')">Alunos</button>
-    <button class="tab-btn" onclick="showTab('presencas')">Presenças</button>
-    <button class="tab-btn" onclick="showTab('certificados')">Certificados</button>
-    <button class="tab-btn" onclick="showTab('perfil')">Perfil</button>
-  </nav>  <!-- CONTEÚDO -->  <main class="p-4">
-    <!-- AULAS -->
-    <section id="aulas" class="tab hidden">
-      <h2 class="text-xl font-semibold mb-2">Gerir Aulas</h2>
-      <input type="text" placeholder="Título da aula" class="border p-2 w-full mb-2">
-      <textarea placeholder="Descrição" class="border p-2 w-full mb-2"></textarea>
-      <button class="bg-red-600 text-white px-4 py-2 rounded">Salvar Aula</button>
-    </section><!-- ALUNOS -->
-<section id="alunos" class="tab hidden">
-  <h2 class="text-xl font-semibold mb-2">Lista de Alunos</h2>
-  <input type="text" placeholder="Nome do aluno" class="border p-2 w-full mb-2">
-  <button class="bg-red-600 text-white px-4 py-2 rounded">Adicionar Aluno</button>
-</section>
+<body>
 
-<!-- PRESENÇAS -->
-<section id="presencas" class="tab hidden">
-  <h2 class="text-xl font-semibold mb-2">Registar Presenças</h2>
-  <p class="text-sm text-gray-600">(Lista interativa será implementada)</p>
-</section>
+<div class="login-box" id="loginBox">
+  <h2>Login KwikGest</h2>
+  <input type="text" id="username" placeholder="Usuário">
+  <input type="password" id="password" placeholder="Senha">
+  <button onclick="login()">Entrar</button>
+</div>
 
-<!-- CERTIFICADOS -->
-<section id="certificados" class="tab hidden">
-  <h2 class="text-xl font-semibold mb-2">Emitir Certificado</h2>
-  <input type="text" id="nomeAluno" placeholder="Nome do aluno" class="border p-2 w-full mb-2">
-  <button onclick="gerarCertificado()" class="bg-red-600 text-white px-4 py-2 rounded">Gerar PDF</button>
-</section>
+<div id="mainPanel" class="hidden">
+  <div class="header">
+    <h1>KwikGest Angola - Educação</h1>
+    <p>Gestor Digital para Professores e Formadores</p>
+  </div>
 
-<!-- PERFIL -->
-<section id="perfil" class="tab hidden">
-  <h2 class="text-xl font-semibold mb-2">Perfil do Formador</h2>
-  <input type="text" placeholder="Nome" class="border p-2 w-full mb-2">
-  <textarea placeholder="Descrição breve" class="border p-2 w-full mb-2"></textarea>
-</section>
+  <div class="panel">
+    <h3>Criador de Horários</h3>
+    <input type="text" placeholder="Ex: Segunda - 8h às 10h - Matemática">
+    <button>Salvar</button>
 
-  </main>  <!-- SCRIPT -->  <script>
-    const tabs = document.querySelectorAll('.tab');
-    function showTab(id) {
-      tabs.forEach(t => t.classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
+    <h3>Lista de Presenças</h3>
+    <input type="text" placeholder="Nome do aluno">
+    <button>Marcar Presença</button>
+
+    <h3>Gestão de Alunos</h3>
+    <input type="text" placeholder="Nome | Contacto">
+    <button>Adicionar Aluno</button>
+
+    <h3>Emissão de Certificados (PDF)</h3>
+    <input type="text" placeholder="Nome do Certificado">
+    <button onclick="gerarPDF()">Gerar PDF</button>
+  </div>
+</div>
+
+<script>
+  function login() {
+    const user = document.getElementById('username').value;
+    const pass = document.getElementById('password').value;
+    if (user === 'admin' && pass === '1234') {
+      document.getElementById('loginBox').classList.add('hidden');
+      document.getElementById('mainPanel').classList.remove('hidden');
+    } else {
+      alert('Usuário ou senha incorretos!');
     }
-    function gerarCertificado() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const nome = document.getElementById('nomeAluno').value;
-      doc.text("Certificado de Participação", 20, 30);
-      doc.text(`Certificamos que ${nome} participou da formação.`, 20, 50);
-      doc.save(`Certificado_${nome}.pdf`);
-    }
-    showTab('aulas');
-  </script></body>
+  }
+
+  function gerarPDF() {
+    alert('Certificado gerado em PDF (função de exportação será adicionada)');
+  }
+</script>
+
+</body>
 </html>
