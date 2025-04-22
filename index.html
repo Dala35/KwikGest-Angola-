@@ -1,155 +1,98 @@
-<!DOCTYPE html><html lang="pt">
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KwikGest Angola – Gestão Escolar</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <meta charset="UTF-8">
+  <title>KwikGest Angola – Educação</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 20px;
-    }
-    h1, h2 {
-      color: #222;
-    }
-    .section {
-      background: #fff;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background: #ddd;
-    }
-    .stats {
-      display: flex;
-      gap: 20px;
-    }
-    .stat {
-      flex: 1;
-      background: #eef;
-      padding: 10px;
-      border-radius: 6px;
-      text-align: center;
-    }
-    .buttons {
-      margin-top: 10px;
-    }
-    .buttons button {
-      margin-right: 10px;
-      padding: 6px 12px;
-    }
-    .login-section {
-      margin-bottom: 20px;
-    }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; }
+    header { background: #d11d1d; color: white; padding: 20px; text-align: center; }
+    nav { background: #444; padding: 10px; display: flex; justify-content: center; flex-wrap: wrap; }
+    nav button { margin: 5px; padding: 10px 20px; color: white; background: #666; border: none; cursor: pointer; border-radius: 5px; }
+    nav button:hover { background: #d11d1d; }
+    section { padding: 20px; display: none; }
+    .active { display: block; }
+    footer { background: #eee; padding: 10px; text-align: center; font-size: 12px; }
+    input, textarea, select { width: 100%; margin: 5px 0; padding: 8px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    canvas { max-width: 100%; }
   </style>
 </head>
-<body>  <div class="login-section section" id="loginSection">
-    <h2>Login KwikGest Angola</h2>
-    <input type="text" id="username" placeholder="Nome do usuário" />
-    <input type="password" id="password" placeholder="Senha" />
-    <button onclick="login()">Entrar</button>
-    <p id="loginError" style="color:red;"></p>
-  </div>  <div id="mainContent" style="display:none;">
-    <h1>KwikGest Angola – Gestão Escolar</h1><div class="section">
-  <h2>Estatísticas Gerais</h2>
-  <div class="stats">
-    <div class="stat"><strong>Total de Alunos:</strong><br>2</div>
-    <div class="stat"><strong>Feminino:</strong><br>1</div>
-    <div class="stat"><strong>Masculino:</strong><br>1</div>
-  </div>
-  <canvas id="genderChart" height="100"></canvas>
-</div>
+<body>
 
-<div class="section">
+<header>
+  <h1>KwikGest Angola – Educação</h1>
+  <p>Gestão simples para professores e educadores</p>
+</header>
+
+<nav>
+  <button onclick="show('login')">Login</button>
+  <button onclick="show('pautas')">Mini Pautas</button>
+  <button onclick="show('cadernetas')">Cadernetas</button>
+  <button onclick="show('estatisticas')">Estatísticas</button>
+  <button onclick="show('ficheiros')">Ficheiros</button>
+</nav>
+
+<section id="login" class="active">
+  <h2>Login Simulado</h2>
+  <input type="text" placeholder="Usuário" />
+  <input type="password" placeholder="Senha" />
+  <button onclick="alert('Login Simulado com Sucesso!')">Entrar</button>
+</section>
+
+<section id="pautas">
   <h2>Mini Pautas</h2>
-  <div class="buttons">
-    <button onclick="exportPDF('pautas')">Exportar Pauta em PDF</button>
-    <input type="file" accept=".csv,.txt,.pdf" onchange="uploadFile(event)">
-  </div>
-  <table id="pautas">
-    <tr>
-      <th>Aluno</th><th>Disciplina</th><th>Nota 1</th><th>Nota 2</th><th>Média</th><th>Observações</th>
-    </tr>
-    <tr>
-      <td>Ana Paulo</td><td>Matemática</td><td>12</td><td>15</td><td>13.5</td><td></td>
-    </tr>
-    <tr>
-      <td>Carlos Mário</td><td>Matemática</td><td>10</td><td>9</td><td>9.5</td><td>Recuperação</td>
-    </tr>
+  <input type="text" placeholder="Nome da escola">
+  <input type="text" placeholder="Nome do professor">
+  <table>
+    <tr><th>Aluno</th><th>1º Trim</th><th>2º Trim</th><th>3º Trim</th><th>Média</th></tr>
+    <tr><td>Maria</td><td>14</td><td>15</td><td>13</td><td>14</td></tr>
+    <tr><td>José</td><td>12</td><td>13</td><td>14</td><td>13</td></tr>
   </table>
-</div>
+  <button onclick="window.print()">Imprimir</button>
+</section>
 
-<div class="section">
-  <h2>Cadernetas de Aula</h2>
-  <div class="buttons">
-    <button onclick="exportPDF('cadernetas')">Exportar Caderneta em PDF</button>
-    <input type="file" accept=".csv,.txt,.pdf" onchange="uploadFile(event)">
-  </div>
-  <table id="cadernetas">
-    <tr>
-      <th>Data</th><th>Turma</th><th>Disciplina</th><th>Conteúdo Lecionado</th><th>Observações</th>
-    </tr>
-    <tr>
-      <td>2025-04-20</td><td>10A</td><td>Matemática</td><td>Equações do 1º Grau</td><td>Boa participação</td>
-    </tr>
-  </table>
-</div>
+<section id="cadernetas">
+  <h2>Cadernetas de Avaliação</h2>
+  <textarea placeholder="Notas e Avaliações por Disciplina..."></textarea>
+  <button onclick="window.print()">Exportar PDF</button>
+</section>
 
-  </div>  <script>
-    // Simulação de login simples
-    function login() {
-      const user = document.getElementById('username').value;
-      const pass = document.getElementById('password').value;
-      if (user === "admin" && pass === "1234") {
-        document.getElementById('loginSection').style.display = "none";
-        document.getElementById('mainContent').style.display = "block";
-      } else {
-        document.getElementById('loginError').innerText = "Usuário ou senha incorretos.";
-      }
+<section id="estatisticas">
+  <h2>Estatísticas</h2>
+  <p>Alunos por gênero:</p>
+  <canvas id="grafico"></canvas>
+</section>
+
+<section id="ficheiros">
+  <h2>Carregar e Baixar Ficheiros</h2>
+  <input type="file" accept=".pdf,.png,.jpg,.doc,.xls">
+  <button onclick="alert('Ficheiro enviado!')">Enviar</button>
+  <br><br>
+  <a href="modelo.pdf" download>Baixar Mini Pauta de Exemplo</a>
+</section>
+
+<footer>
+  KwikGest Angola – Para uma educação moderna e eficiente
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  function show(id) {
+    document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+  }
+
+  const ctx = document.getElementById('grafico').getContext('2d');
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Masculino', 'Feminino'],
+      datasets: [{ data: [20, 30], backgroundColor: ['#1e90ff', '#ff69b4'] }]
     }
+  });
+</script>
 
-    // Gráfico por género
-    const ctx = document.getElementById('genderChart');
-    new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: ['Feminino', 'Masculino'],
-        datasets: [{
-          data: [1, 1],
-          backgroundColor: ['#FF69B4', '#6495ED']
-        }]
-      }
-    });
-
-    // Exportar para PDF
-    function exportPDF(tableId) {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const table = document.getElementById(tableId).outerHTML;
-      doc.text("Relatório – KwikGest Angola", 10, 10);
-      doc.fromHTML(table, 10, 20);
-      doc.save(`${tableId}_kwikgest.pdf`);
-    }
-
-    // Upload de ficheiros
-    function uploadFile(event) {
-      const file = event.target.files[0];
-      alert("Ficheiro '" + file.name + "' carregado com sucesso (simulado)!");
-    }
-  </script></body>
+</body>
 </html>
