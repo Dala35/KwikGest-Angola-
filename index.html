@@ -1,172 +1,163 @@
-<!DOCTYPE html><html lang="pt">
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>KwikGest Angola – Educação</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }body {
-  background-color: #f4f6f8;
-  color: #333;
-  margin: 0;
-  padding: 20px;
-}
-
-header {
-  background-color: #004080;
-  color: white;
-  padding: 25px 20px;
-  border-radius: 15px;
-  text-align: center;
-}
-
-header h1 {
-  font-size: 2rem;
-  margin-bottom: 5px;
-}
-
-header p {
-  font-size: 1rem;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 30px;
-}
-
-.card {
-  background-color: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  transition: all 0.3s ease-in-out;
-}
-
-.card:hover {
-  transform: scale(1.02);
-}
-
-.card h2 {
-  color: #004080;
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-}
-
-.card p {
-  font-size: 0.95rem;
-  margin-bottom: 15px;
-}
-
-button {
-  background-color: #004080;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background 0.3s;
-}
-
-button:hover {
-  background-color: #0066cc;
-}
-
-footer {
-  margin-top: 50px;
-  text-align: center;
-  font-size: 0.85rem;
-  color: #777;
-}
-
-@media (max-width: 600px) {
-  header h1 {
-    font-size: 1.5rem;
-  }
-}
-
+    body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+    h2 { color: #b22222; }
+    .hidden { display: none; }
+    section { background: #fff; padding: 15px; margin-top: 20px; border-radius: 8px; box-shadow: 0 0 6px #ccc; }
+    input, select, button, textarea { margin: 5px 0; padding: 8px; width: 100%; border: 1px solid #ccc; border-radius: 4px; }
+    button { background: #b22222; color: white; border: none; cursor: pointer; }
+    nav { margin-bottom: 15px; }
+    nav button { margin-right: 5px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    table, th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>KwikGest Angola – Educação</h1>
-    <p>Organize suas turmas, aulas e certificados com facilidade</p>
-  </header>  <section class="grid">
-    <div class="card">
-      <h2>Criador de Horários</h2>
-      <p>Monte seus horários escolares de forma simples.</p>
-      <button onclick="window.location.href='horarios.html'">Criar Horário</button>
-    </div><div class="card">
+
+  <!-- Login Simulado -->
+  <div id="login">
+    <h2>Login Simulado</h2>
+    <input id="user" placeholder="Nome de utilizador">
+    <button onclick="entrar()">Entrar</button>
+  </div>
+
+  <!-- Painel Principal -->
+  <div id="painel" class="hidden">
+    <h2>KwikGest Angola – Painel Educador</h2>
+    <nav>
+      <button onclick="mostrar('estatisticas')">Estatísticas</button>
+      <button onclick="mostrar('pautas')">Mini Pautas</button>
+      <button onclick="mostrar('cadernetas')">Cadernetas</button>
+    </nav>
+
+    <!-- Estatísticas -->
+    <section id="estatisticas" class="hidden">
+      <h3>Estatísticas por Gênero e Curso</h3>
+      <form id="formEst">
+        <input placeholder="Nome" id="nomeEst">
+        <select id="generoEst">
+          <option value="Masculino">Masculino</option>
+          <option value="Feminino">Feminino</option>
+        </select>
+        <input placeholder="Curso" id="cursoEst">
+        <input type="number" placeholder="Nota final" id="notaEst">
+        <button type="button" onclick="guardarEst()">Guardar</button>
+      </form>
+      <div id="resumoEst"></div>
+    </section>
+
+    <!-- Mini Pautas -->
+    <section id="pautas" class="hidden">
+      <h3>Mini Pautas</h3>
+      <form id="formPauta">
+        <input placeholder="Disciplina" id="disciplina">
+        <textarea id="dadosPauta" placeholder="Nome do aluno,Nota (uma por linha)"></textarea>
+        <button type="button" onclick="mostrarPauta()">Gerar Pauta</button>
+      </form>
+      <div id="tabelaPauta"></div>
+    </section>
+
+    <!-- Cadernetas -->
+    <section id="cadernetas" class="hidden">
+      <h3>Cadernetas de Avaliação</h3>
+      <form id="formCad">
+        <input placeholder="Nome do aluno" id="nomeCad">
+        <input placeholder="Disciplina" id="disciplinaCad">
+        <input placeholder="Tipo de avaliação (teste, trabalho...)" id="tipoCad">
+        <input type="number" placeholder="Nota" id="notaCad">
+        <input type="date" id="dataCad">
+        <button type="button" onclick="guardarCad()">Guardar Avaliação</button>
+      </form>
+      <div id="listaCad"></div>
+    </section>
+
+  </div>
+
+  <script>
+    // Login Simulado
+    function entrar() {
+      if (document.getElementById('user').value.trim() !== '') {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('painel').style.display = 'block';
       }
-  </style>
-</head>
-<body>
-  
-  </style>
-</head>
-<body>
-  <h1>Criador de Horários</h1>
-  <table>
-    <tr>
-      <th>Hora</th>
-      <th>Segunda</th>
-      <th>Terça</th>
-      <th>Quarta</th>
-      <th>Quinta</th>
-      <th>Sexta</th>
-    </tr>
-    <tr>
-      <td>08:00 - 09:00</td>
-      <td><input type="text" placeholder="Disciplina"></td>
-      <td><input type="text"></td>
-      <td><input type="text"></td>
-      <td><input type="text"></td>
-      <td><input type="text"></td>
-    </tr>
-    <tr>
-      <td>09:00 - 10:00</td>
-      <td><input type="text"></td>
-      <td><input type="text"></td>
-      <td><input type="text"></td>
-      <td><input type="text"></td>
-      <td><input type="text"></td>
-    </tr>
-    <tr>
-      <td>10:00 - 11:00</td>
-      <td><input type="text"></td>
-      <td><input type="text"></td>
-      <td><input type="text"></td>
-      <td><input type="text"></td>
-      <td><input type="text"></td>
-    </tr>
-  </table>
-</body>
-</html>
-  <\div>
-  <h2>Gestão de Alunos</h2>
-  <p>Adicione e acompanhe os dados dos seus alunos.</p>
-  <button onclick="window.location.href='alunos.html'">Acessar</button>
-</div>
+    }
 
-<div class="card">
-  <h2>Lista de Presenças</h2>
-  <p>Registre presença de forma rápida por aula.</p>
-  <button onclick="window.location.href='presencas.html'">Registar Presenças</button>
-</div>
+    // Navegação
+    function mostrar(id) {
+      ['estatisticas', 'pautas', 'cadernetas'].forEach(sec => {
+        document.getElementById(sec).style.display = 'none';
+      });
+      document.getElementById(id).style.display = 'block';
+    }
 
-<div class="card">
-  <h2>Emissão de Certificados</h2>
-  <p>Gere certificados em PDF para seus alunos.</p>
-  <button onclick="window.location.href='certificados.html'">Emitir Certificado</button>
-</div>
+    // Estatísticas
+    let estList = JSON.parse(localStorage.getItem('estatisticas') || '[]');
+    function guardarEst() {
+      const n = document.getElementById('nomeEst').value;
+      const g = document.getElementById('generoEst').value;
+      const c = document.getElementById('cursoEst').value;
+      const nf = Number(document.getElementById('notaEst').value);
+      if (n && g && c && nf >= 0) {
+        estList.push({ n, g, c, nf });
+        localStorage.setItem('estatisticas', JSON.stringify(estList));
+        resumoEst();
+      }
+    }
+    function resumoEst() {
+      let res = '';
+      const cursos = [...new Set(estList.map(e => e.c))];
+      cursos.forEach(c => {
+        const doCurso = estList.filter(e => e.c === c);
+        const media = (doCurso.reduce((s, e) => s + e.nf, 0) / doCurso.length).toFixed(1);
+        const masc = doCurso.filter(e => e.g === 'Masculino').length;
+        const fem = doCurso.filter(e => e.g === 'Feminino').length;
+        res += `<p><b>${c}:</b> Média: ${media}, Masculino: ${masc}, Feminino: ${fem}</p>`;
+      });
+      document.getElementById('resumoEst').innerHTML = res;
+    }
+    resumoEst();
 
-  </section>  <footer>
-    KwikGest Angola &copy; 2025 — por Dala De Carvalho
-  </footer>
+    // Mini Pautas
+    function mostrarPauta() {
+      const disciplina = document.getElementById('disciplina').value;
+      const dados = document.getElementById('dadosPauta').value.trim().split('\n');
+      let html = `<h4>${disciplina}</h4><table><tr><th>Aluno</th><th>Nota</th></tr>`;
+      dados.forEach(l => {
+        const [nome, nota] = l.split(',');
+        html += `<tr><td>${nome.trim()}</td><td>${nota.trim()}</td></tr>`;
+      });
+      html += '</table>';
+      document.getElementById('tabelaPauta').innerHTML = html;
+    }
+
+    // Cadernetas
+    let cadList = JSON.parse(localStorage.getItem('cadernetas') || '[]');
+    function guardarCad() {
+      const n = document.getElementById('nomeCad').value;
+      const d = document.getElementById('disciplinaCad').value;
+      const t = document.getElementById('tipoCad').value;
+      const nota = document.getElementById('notaCad').value;
+      const dt = document.getElementById('dataCad').value;
+      if (n && d && t && nota && dt) {
+        cadList.push({ n, d, t, nota, dt });
+        localStorage.setItem('cadernetas', JSON.stringify(cadList));
+        listarCad();
+      }
+    }
+    function listarCad() {
+      let html = '<table><tr><th>Aluno</th><th>Disciplina</th><th>Tipo</th><th>Nota</th><th>Data</th></tr>';
+      cadList.forEach(e => {
+        html += `<tr><td>${e.n}</td><td>${e.d}</td><td>${e.t}</td><td>${e.nota}</td><td>${e.dt}</td></tr>`;
+      });
+      html += '</table>';
+      document.getElementById('listaCad').innerHTML = html;
+    }
+    listarCad();
+  </script>
 </body>
 </html>
