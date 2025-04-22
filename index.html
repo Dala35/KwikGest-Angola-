@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="pt">
+<!DOCTYPE html>
+<html lang="pt">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,6 +18,9 @@
     input, select { width: 100%; padding: 0.5rem; margin-bottom: 1rem; border-radius: 5px; border: 1px solid #ccc; }
     .stats { display: flex; flex-wrap: wrap; gap: 1rem; }
     .stats .card { flex: 1 1 200px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    table, th, td { border: 1px solid #ddd; }
+    th, td { padding: 0.5rem; text-align: left; }
   </style>
 </head>
 <body>
@@ -38,20 +42,20 @@
     <p>
       Pensada para o contexto real das escolas angolanas, oferece uma solução prática e acessível para tornar a gestão educacional mais eficiente.
     </p>
-  </section>  <section class="card" id="login">
-    <h3>Login (Simulado)</h3>
-    <input type="text" placeholder="Nome de usuário" />
-    <input type="password" placeholder="Senha" />
-    <button class="btn">Entrar</button>
-  </section>  <section class="card" id="subs">
-    <h3>Planos de Subscrição</h3>
-    <ul>
-      <li><strong>Grátis:</strong> 1 módulo, 5 registros/mês</li>
-      <li><strong>Básico (1500 Kz/mês):</strong> até 2 módulos, suporte básico</li>
-      <li><strong>Pro (3000 Kz/mês):</strong> módulos ilimitados, relatórios PDF</li>
-      <li><strong>Premium (6000 Kz/mês):</strong> personalização, backup, suporte completo</li>
-    </ul>
-  </section>  <section class="card" id="modulos">
+  </section>
+
+  <!-- Seção de upload de arquivo -->
+  <section class="card" id="upload">
+    <h3>Carregar Caderneta ou Mini Pauta</h3>
+    <form id="uploadForm">
+      <input type="file" id="fileInput" accept=".csv" />
+      <button class="btn" type="submit">Carregar</button>
+    </form>
+    <div id="fileContent"></div>
+  </section>
+
+  <!-- Seção de Módulos e Estatísticas -->
+  <section class="card" id="modulos">
     <h3>Módulos Disponíveis</h3>
     <ul>
       <li>Caderneta de Avaliações</li>
@@ -60,21 +64,47 @@
       <li>Exportação em PDF</li>
     </ul>
     <p><button class="btn">Acessar Plataforma</button></p>
-  </section>  <section class="card stats">
-    <div class="card">
-      <h4>Total de Alunos</h4>
-      <p>122</p>
-    </div>
-    <div class="card">
-      <h4>Percentual de Aprovação</h4>
-      <p>88%</p>
-    </div>
-    <div class="card">
-      <h4>Disciplinas com mais dificuldade</h4>
-      <p>Matemática, Física</p>
-    </div>
-  </section>  <footer>
+  </section>
+
+  <footer>
     <p>&copy; 2025 KwikGest Angola. Todos os direitos reservados.</p>
   </footer>
+
+  <script>
+    // Função para processar o arquivo CSV
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+      
+      if (!file) {
+        alert("Por favor, selecione um arquivo!");
+        return;
+      }
+
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        const contents = e.target.result;
+        const rows = contents.split('\n');
+        
+        let table = '<table>';
+        rows.forEach(row => {
+          const cells = row.split(',');
+          table += '<tr>';
+          cells.forEach(cell => {
+            table += `<td>${cell.trim()}</td>`;
+          });
+          table += '</tr>';
+        });
+        table += '</table>';
+        
+        document.getElementById('fileContent').innerHTML = table;
+      };
+      
+      reader.readAsText(file);
+    });
+  </script>
 </body>
-</html>    
+</html>
