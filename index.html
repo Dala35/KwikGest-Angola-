@@ -1,110 +1,155 @@
-<!DOCTYPE html>
-<html lang="pt">
+<!DOCTYPE html><html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KwikGest Angola - Plataforma Educacional</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KwikGest Angola – Gestão Escolar</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f9f9f9; }
-    header { background-color: #d71920; color: white; padding: 1rem; text-align: center; }
-    nav { background-color: #333; color: white; display: flex; justify-content: space-around; padding: 1rem 0; }
-    nav a { color: white; text-decoration: none; margin: 0 1rem; }
-    section { padding: 2rem; }
-    .hero { background: white; padding: 2rem; border-radius: 10px; margin-bottom: 2rem; box-shadow: 0 0 10px #ccc; }
-    .btn { background: #d71920; color: white; border: none; padding: 0.7rem 1.5rem; cursor: pointer; border-radius: 5px; }
-    .card { background: white; border-radius: 10px; padding: 1rem; box-shadow: 0 0 8px rgba(0,0,0,0.1); margin-bottom: 1.5rem; }
-    footer { background-color: #333; color: white; text-align: center; padding: 1rem; }
-    input, select { width: 100%; padding: 0.5rem; margin-bottom: 1rem; border-radius: 5px; border: 1px solid #ccc; }
-    .stats { display: flex; flex-wrap: wrap; gap: 1rem; }
-    .stats .card { flex: 1 1 200px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-    table, th, td { border: 1px solid #ddd; }
-    th, td { padding: 0.5rem; text-align: left; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #222;
+    }
+    .section {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #ddd;
+    }
+    .stats {
+      display: flex;
+      gap: 20px;
+    }
+    .stat {
+      flex: 1;
+      background: #eef;
+      padding: 10px;
+      border-radius: 6px;
+      text-align: center;
+    }
+    .buttons {
+      margin-top: 10px;
+    }
+    .buttons button {
+      margin-right: 10px;
+      padding: 6px 12px;
+    }
+    .login-section {
+      margin-bottom: 20px;
+    }
   </style>
 </head>
-<body>
-  <header>
-    <h1>KwikGest Angola</h1>
-    <p>Gestão Educacional Moderna e Simples para Professores</p>
-  </header>
-  <nav>
-    <a href="#sobre">Sobre</a>
-    <a href="#login">Login</a>
-    <a href="#subs">Subscrição</a>
-    <a href="#modulos">Módulos</a>
-  </nav>
-  <section class="hero" id="sobre">
-    <h2>O que é a KwikGest Angola?</h2>
-    <p>
-      KwikGest Angola é uma micro SaaS criada especialmente para professores, técnicos e coordenadores de ensino em Angola. Com ela, é possível gerir turmas, controlar avaliações, emitir pautas e relatórios de estatísticas de forma digital e simplificada.
-    </p>
-    <p>
-      Pensada para o contexto real das escolas angolanas, oferece uma solução prática e acessível para tornar a gestão educacional mais eficiente.
-    </p>
-  </section>
+<body>  <div class="login-section section" id="loginSection">
+    <h2>Login KwikGest Angola</h2>
+    <input type="text" id="username" placeholder="Nome do usuário" />
+    <input type="password" id="password" placeholder="Senha" />
+    <button onclick="login()">Entrar</button>
+    <p id="loginError" style="color:red;"></p>
+  </div>  <div id="mainContent" style="display:none;">
+    <h1>KwikGest Angola – Gestão Escolar</h1><div class="section">
+  <h2>Estatísticas Gerais</h2>
+  <div class="stats">
+    <div class="stat"><strong>Total de Alunos:</strong><br>2</div>
+    <div class="stat"><strong>Feminino:</strong><br>1</div>
+    <div class="stat"><strong>Masculino:</strong><br>1</div>
+  </div>
+  <canvas id="genderChart" height="100"></canvas>
+</div>
 
-  <!-- Seção de upload de arquivo -->
-  <section class="card" id="upload">
-    <h3>Carregar Caderneta ou Mini Pauta</h3>
-    <form id="uploadForm">
-      <input type="file" id="fileInput" accept=".csv" />
-      <button class="btn" type="submit">Carregar</button>
-    </form>
-    <div id="fileContent"></div>
-  </section>
+<div class="section">
+  <h2>Mini Pautas</h2>
+  <div class="buttons">
+    <button onclick="exportPDF('pautas')">Exportar Pauta em PDF</button>
+    <input type="file" accept=".csv,.txt,.pdf" onchange="uploadFile(event)">
+  </div>
+  <table id="pautas">
+    <tr>
+      <th>Aluno</th><th>Disciplina</th><th>Nota 1</th><th>Nota 2</th><th>Média</th><th>Observações</th>
+    </tr>
+    <tr>
+      <td>Ana Paulo</td><td>Matemática</td><td>12</td><td>15</td><td>13.5</td><td></td>
+    </tr>
+    <tr>
+      <td>Carlos Mário</td><td>Matemática</td><td>10</td><td>9</td><td>9.5</td><td>Recuperação</td>
+    </tr>
+  </table>
+</div>
 
-  <!-- Seção de Módulos e Estatísticas -->
-  <section class="card" id="modulos">
-    <h3>Módulos Disponíveis</h3>
-    <ul>
-      <li>Caderneta de Avaliações</li>
-      <li>Mini Pautas</li>
-      <li>Estatísticas por Curso e Gênero</li>
-      <li>Exportação em PDF</li>
-    </ul>
-    <p><button class="btn">Acessar Plataforma</button></p>
-  </section>
+<div class="section">
+  <h2>Cadernetas de Aula</h2>
+  <div class="buttons">
+    <button onclick="exportPDF('cadernetas')">Exportar Caderneta em PDF</button>
+    <input type="file" accept=".csv,.txt,.pdf" onchange="uploadFile(event)">
+  </div>
+  <table id="cadernetas">
+    <tr>
+      <th>Data</th><th>Turma</th><th>Disciplina</th><th>Conteúdo Lecionado</th><th>Observações</th>
+    </tr>
+    <tr>
+      <td>2025-04-20</td><td>10A</td><td>Matemática</td><td>Equações do 1º Grau</td><td>Boa participação</td>
+    </tr>
+  </table>
+</div>
 
-  <footer>
-    <p>&copy; 2025 KwikGest Angola. Todos os direitos reservados.</p>
-  </footer>
-
-  <script>
-    // Função para processar o arquivo CSV
-    document.getElementById('uploadForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const fileInput = document.getElementById('fileInput');
-      const file = fileInput.files[0];
-      
-      if (!file) {
-        alert("Por favor, selecione um arquivo!");
-        return;
+  </div>  <script>
+    // Simulação de login simples
+    function login() {
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+      if (user === "admin" && pass === "1234") {
+        document.getElementById('loginSection').style.display = "none";
+        document.getElementById('mainContent').style.display = "block";
+      } else {
+        document.getElementById('loginError').innerText = "Usuário ou senha incorretos.";
       }
+    }
 
-      const reader = new FileReader();
-      
-      reader.onload = function(e) {
-        const contents = e.target.result;
-        const rows = contents.split('\n');
-        
-        let table = '<table>';
-        rows.forEach(row => {
-          const cells = row.split(',');
-          table += '<tr>';
-          cells.forEach(cell => {
-            table += `<td>${cell.trim()}</td>`;
-          });
-          table += '</tr>';
-        });
-        table += '</table>';
-        
-        document.getElementById('fileContent').innerHTML = table;
-      };
-      
-      reader.readAsText(file);
+    // Gráfico por género
+    const ctx = document.getElementById('genderChart');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Feminino', 'Masculino'],
+        datasets: [{
+          data: [1, 1],
+          backgroundColor: ['#FF69B4', '#6495ED']
+        }]
+      }
     });
-  </script>
-</body>
+
+    // Exportar para PDF
+    function exportPDF(tableId) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const table = document.getElementById(tableId).outerHTML;
+      doc.text("Relatório – KwikGest Angola", 10, 10);
+      doc.fromHTML(table, 10, 20);
+      doc.save(`${tableId}_kwikgest.pdf`);
+    }
+
+    // Upload de ficheiros
+    function uploadFile(event) {
+      const file = event.target.files[0];
+      alert("Ficheiro '" + file.name + "' carregado com sucesso (simulado)!");
+    }
+  </script></body>
 </html>
